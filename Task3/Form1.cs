@@ -60,7 +60,7 @@ namespace Task3
             }
             if (e.Button == MouseButtons.Left)
             {
-                MessageBox.Show("Inside");
+                MessageBox.Show("Outside");
             }
             
             if (e.Button == MouseButtons.Right)

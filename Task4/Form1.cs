@@ -58,12 +58,15 @@ namespace Task4
                 this.Text = $"S:{l.Width*l.Height}|X:{l.Left}|Y:{l.Top}";
             };
             t.MouseDoubleClick += (s, a) => {
-                int minN = int.MaxValue;
+                if (a.Button != MouseButtons.Left)
+                    return;
+
+                int minN = number;
                 List<Label> temp = new List<Label>();
                 labels.ForEach(i => { if (i.ClientRectangle.Contains(e.X, e.Y)) temp.Add(i); });
                 foreach (var item in temp)
                 {
-                    if (int.Parse(item.Text) > minN)
+                    if (int.Parse(item.Text) < minN)
                         minN = int.Parse(item.Text);
                 }
                 Label l = labels.Where(i => i.Text == minN.ToString())?.ElementAt<Label>(0);

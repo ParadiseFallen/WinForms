@@ -26,9 +26,9 @@ namespace Task4
         }
         private void Form1_MouseUp(object sender, MouseEventArgs e)
         {
-            var sizeX = e.X-Start.X;
-            var sizeY= e.Y - Start.Y;
-            if (sizeX < 10&& sizeX > 10 || sizeY < 10&& sizeY > 10)
+            var sizeX = Math.Abs(e.X - Start.X);
+            var sizeY = Math.Abs(e.Y - Start.Y);
+            if (sizeX < 10 || sizeY < 10)
             { 
                 MessageBox.Show("TooSmall","Alert!");
                 return;
@@ -47,7 +47,12 @@ namespace Task4
                 int maxN=0;
 
                 List<Label> temp = new List<Label>();
-                GetLabels().ForEach(i => { if(new Rectangle(i.Location.X, i.Location.Y, i.Width,i.Height).Contains(e.Location)) temp.Add(i); });
+                GetLabels().ForEach(i => {
+                    /*if (new Rectangle(i.Location.X, i.Location.Y, i.Width,i.Height).Contains(e.Location))
+                        temp.Add(i);*/
+                    if (i.ClientRectangle.Contains(a.Location))
+                        temp.Add(i);
+                });
                 foreach (var item in temp)
                 {
                     if (int.Parse(item.Text) > maxN)
@@ -62,11 +67,19 @@ namespace Task4
                 int minN = number;
 
                 var temp = new List<Label>();
-                GetLabels().ForEach(i => { if (new Rectangle(i.Location.X, i.Location.Y, i.Width, i.Height).Contains(e.X, e.Y)) temp.Add(i); });
+                GetLabels().ForEach(i => {
+                    Console.WriteLine($"{new Rectangle(i.Left, i.Top, i.Left + i.Width, i.Top + i.Height)} {i.Left + a.X} {i.Top + a.Y} ");
+                    Console.WriteLine($"{new Rectangle(i.Left, i.Top, i.Left + i.Width, i.Top + i.Height).Contains(i.Left + a.X, i.Top + a.Y)}");
+                    if (new Rectangle(i.Left, i.Top, i.Left + i.Width, i.Top + i.Height).Contains(i.Left + a.X, i.Top + a.Y))
+                        temp.Add(i);
+                });
                 foreach (var item in temp)
                 {
+                    Console.WriteLine($"{int.Parse(item.Text)}   {minN} ");
                     if (int.Parse(item.Text) < minN)
+                    {
                         minN = int.Parse(item.Text);
+                    }
                 }
                 Label l = GetLabels().Where(i => i.Text == minN.ToString())?.ElementAt<Label>(0);
                 Controls.Remove(l);
